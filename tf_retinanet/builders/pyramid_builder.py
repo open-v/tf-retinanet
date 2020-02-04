@@ -21,7 +21,6 @@ def build_pyramid_features(backbone, feature_size=256):
 
   B5 = tf.keras.layers.Activation('relu', name='B4_relu')(B4)
   B5 = tf.keras.layers.Conv2D(feature_size, kernel_size=4, strides=2, padding='same', name='B5')(B5)
-
   return [B1, B2, B3, B4, B5]
 
 def build_baseline_pyramid_block(n, num_anchors, pyramid_feature_size=256, feature_size=256, name='pyramid'):
@@ -30,7 +29,7 @@ def build_baseline_pyramid_block(n, num_anchors, pyramid_feature_size=256, featu
     'strides': 1,
     'padding': 'same',
     'kernel_initializer': tf.keras.initializers.RandomNormal(mean=0.0, stddev=0.01, seed=None),
-    'bias_initializer': 'zeros'
+    'bias_initializer': 'zeros',
   }
   inputs = tf.keras.Input(shape=(None, None, pyramid_feature_size))
   x = tf.keras.layers.Conv2D(filters=feature_size, activation='relu', name=name + '_conv_0', **options)(inputs)

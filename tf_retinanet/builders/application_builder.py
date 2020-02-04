@@ -12,7 +12,7 @@ def build(backbone, num_classes, num_anchors, shape=(None, None, 3), inputs=None
 
   models = [
     ('localization', model_builder.build_localization_model(4, num_anchors)),
-    ('classification', model_builder.build_classification_model(num_classes, num_anchors))
+    ('classification', model_builder.build_classification_model(num_classes, num_anchors)),
   ]
 
   model = model_builder.build(backbone, models)

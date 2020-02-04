@@ -29,7 +29,7 @@ def build_focal_loss(alpha=0.25, gamma=2.0):
     labels = y_true[:, :, :-1]
     anchor_state = y_true[:, :, -1]
     classification = y_pred
-    
+
     indices = tf.where(tf.keras.backend.not_equal(anchor_state, -1))
     labels = tf.gather_nd(labels, indices)
     classification = tf.gather_nd(classification, indices)
