@@ -1,5 +1,4 @@
 import numpy as np
-import tensorflow as tf
 from tf_retinanet.builders import config_builder
 from tf_retinanet.builders.compute_overlap import compute_overlap
 
@@ -54,9 +53,9 @@ def anchor_targets_bbox(anchors, images, bboxes, labels, num_classes, negative_o
     positive_overlap=0.5):
   batch_size = images.shape[0]
   localization_batch = np.zeros((batch_size, anchors.shape[0], 4 + 1),
-    dtype=tf.keras.backend.floatx())
+    dtype=np.float32)
   classification_batch = np.zeros((batch_size, anchors.shape[0], num_classes + 1),
-    dtype=tf.keras.backend.floatx())
+    dtype=np.float32)
   for index in range(images.shape[0]):
     image, bbox, label = images[index], bboxes[index], labels[index]
     if bbox.shape[0]:

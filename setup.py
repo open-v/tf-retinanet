@@ -11,22 +11,22 @@ class BuildExtension(setuptools.Command):
   def __init__(self, *args, **kwargs):
     from setuptools.command.build_ext import build_ext as SetupToolsBuildExt
     self.__dict__['_command'] = SetupToolsBuildExt(*args, **kwargs)
-  
+
   def __getattr__(self, name):
     return getattr(self._command, name)
-  
+
   def __setattr__(self, name, value):
     setattr(self._command, name, value)
 
   def initialize_options(self, *args, **kwargs):
     return self._command.initialize_options(*args, **kwargs)
-  
+
   def finalize_options(self, *args, **kwargs):
     ret = self._command.finalize_options(*args, **kwargs)
     import numpy
     self.include_dirs.append(numpy.get_include())
     return ret
-  
+
   def run(self, *args, **kwargs):
     return self._command.run(*args, **kwargs)
 
@@ -49,7 +49,5 @@ setuptools.setup(
   install_requires=['tensorflow', 'six', 'scipy', 'cython', 'Pillow', 'opencv-python'],
   # entry_points = {},
   ext_modules = extensions,
-  setup_requires = ['tensorflow>=2.0', 'cython>=0.28', 'numpy>=1.14.0']
+  setup_requires = ['tensorflow>=2.0.0', 'cython>=0.28', 'numpy>=1.14.0']
 )
-
-
