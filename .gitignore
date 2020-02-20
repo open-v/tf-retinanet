@@ -1,13 +1,8 @@
 __pycache__/
-head/
-data/
-dataset_builder.py
-example.jpg
-example.py
-Dataset.ipnb
-.Python
+notebooks/
+datasets/
+dev/
 *.py[cod]
-*$py.class
 /build/
 /dist/
 /eggs/

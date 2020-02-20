@@ -1,35 +1,32 @@
 import tensorflow as tf
-import numpy as np
-from tf_retinanet import image as _image
-from tf_retinanet import transform as _transform
-from tf_retinanet import data
-from tf_retinanet.builders.anchors_builder import anchors_for_shape
+from . import builders
+from . import configs
+from . import layers
+from . import losses
+from . import models
+from . import data
+from . import image
+from . import visualization
+from tqdm import tqdm
+from .builders.model_builder import build
 
-def resize(source, target):
-  shape = tf.keras.backend.shape(target)
-  return tf.image.resize(source, (shape[1], shape[2]))
+@tf.function
+def train(model, dataset, epochs=5, lr=1e-5, checkpoints=None):
+  optimizer = tf.keras.optimizers.Adam(lr=lr)
+  for i in range(epochs):
+    dataset = dataset.shuffle(1000)
+    # training
+    for images, boxes, labels in tqdm(dataset, desc='Epoch {} of {}'.format(i + 1, epochs)):
+      with tf.GradientTape() as tape:
+        localization, classification = model(images, training=True)
+        smooth = losses.smooth_l1(boxes, localization)
+        focal  = losses.focal(labels, classification)
+      gradients = tape.gradient([smooth, focal], model.trainable_variables)
+      optimizer.apply_gradients(zip(gradients, model.trainable_variables))
+    # evaluation
+    print('Localization loss: {}, classification loss: {}'.format(smooth, focal))
 
-def transform(image, bboxes, mode='coffe', min_side=800, max_side=1333, transform=None, **kwargs):
-  if transform:
-    image = _transform.apply_transform(transform, image, **kwargs)
-    bboxes = bboxes.copy()
-    for index in range(bboxes.shape[0]):
-      bboxes[index, :] = _transform.transform_aabb(transform, bboxes[index, :])
-
-  image = _image.preprocess(image, mode=mode)
-  image, scale = _image.resize(image, min_side=min_side, max_side=max_side)
-  bboxes = bboxes * scale
-  return image, bboxes
-
-def to_classes(labels):
-  data = {}
-  index = 0
-  classes = np.zeros(shape=(labels.shape[0], ))
-  for i in range(labels.shape[0]):
-    name = labels[i]
-    if not name in data:
-      data[name] = index
-      index += 1
-    classes[i] = data[name]
-  return classes
-
+@tf.function
+def detection(model, images, **kwargs):
+  images = tf.cast(images, dtype=tf.float32)
+  return model(images, detection=True, **kwargs)
