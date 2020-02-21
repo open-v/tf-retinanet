@@ -41,4 +41,3 @@ def set_config(**kwargs):
   options = config.get_config()
   options.update(**kwargs)
   config = Config(**options)
-

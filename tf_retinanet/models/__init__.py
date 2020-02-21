@@ -79,6 +79,8 @@ class RetinaNet(tf.keras.Model):
     return [localization, classification]
 
   def _filter_detections(self, boxes, classes, max_detections=300, iou_threshold=0.5):
+    # TODO: optimize performance
+    # TODO: graph based execution
     all_indices = []
     for c in range(int(classes.shape[1])):
       scores = classes[:, c]
@@ -87,7 +89,7 @@ class RetinaNet(tf.keras.Model):
       filtered_boxes = tf.gather_nd(boxes, indices)
       filtered_scores = tf.gather(scores, indices)[:, 0]
       nms_indices = tf.image.non_max_suppression(
-        filtered_boxes, filtered_scores, max_output_size=300, iou_threshold=0.5)
+        filtered_boxes, filtered_scores, max_output_size=max_detections, iou_threshold=iou_threshold)
       indices = tf.gather(indices, nms_indices)
       labels = tf.gather_nd(labels, indices)
       indices = tf.stack([indices[:, 0], labels], axis=1)
@@ -97,12 +99,12 @@ class RetinaNet(tf.keras.Model):
     scores = tf.gather_nd(classes, indices)
     labels = indices[:, 1]
 
-    scores, top_indices = tf.nn.top_k(scores, k=tf.math.minimum(300, tf.shape(scores)[0]))
+    scores, top_indices = tf.nn.top_k(scores, k=tf.math.minimum(max_detections, tf.shape(scores)[0]))
     indices = tf.gather(indices[:, 0], top_indices)
     boxes = tf.gather(boxes, indices)
     labels = tf.gather(labels, top_indices)
 
-    pad_size = tf.math.maximum(0, 300 - tf.shape(scores)[0])
+    pad_size = tf.math.maximum(0, max_detections - tf.shape(scores)[0])
 
     boxes = tf.pad(boxes, [[0, pad_size], [0, 0]], constant_values=-1)
     scores = tf.pad(scores, [[0, pad_size]], constant_values=-1)

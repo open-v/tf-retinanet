@@ -2,6 +2,7 @@ __pycache__/
 notebooks/
 datasets/
 dev/
+example.py
 *.py[cod]
 /build/
 /dist/

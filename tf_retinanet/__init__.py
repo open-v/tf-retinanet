@@ -9,9 +9,10 @@ from . import image
 from . import visualization
 from tqdm import tqdm
 from .builders.model_builder import build
+from . import anchors
 
 @tf.function
-def train(model, dataset, epochs=5, lr=1e-5, checkpoints=None):
+def train(model, dataset, num_classes, epochs=5, lr=1e-5, checkpoints=None):
   optimizer = tf.keras.optimizers.Adam(lr=lr)
   for i in range(epochs):
     dataset = dataset.shuffle(1000)
@@ -23,8 +24,6 @@ def train(model, dataset, epochs=5, lr=1e-5, checkpoints=None):
         focal  = losses.focal(labels, classification)
       gradients = tape.gradient([smooth, focal], model.trainable_variables)
       optimizer.apply_gradients(zip(gradients, model.trainable_variables))
-    # evaluation
-    print('Localization loss: {}, classification loss: {}'.format(smooth, focal))
 
 @tf.function
 def detection(model, images, **kwargs):

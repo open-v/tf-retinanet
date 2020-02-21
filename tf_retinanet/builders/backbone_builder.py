@@ -1,5 +1,12 @@
 import tensorflow as tf
 
+# TODO: mobilenet_v2
+# TODO: resnet_v1
+# TODO: resnet_v2
+# TODO: nasnet_large
+# TODO: nasnet_mobile
+# TODO: densenet
+
 backbones = {
   'mobilenet_v1': [
     tf.keras.applications.MobileNet, 'conv_pw_5_relu', 'conv_pw_11_relu', 'conv_pw_13_relu']
