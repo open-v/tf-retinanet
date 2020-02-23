@@ -1,6 +1,6 @@
 __pycache__/
 notebooks/
-datasets/
+/datasets/
 dev/
 example.py
 *.py[cod]
