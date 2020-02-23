@@ -9,7 +9,7 @@ setuptools.setup(
   author='Firdavs Beknazarov',
   author_email='opendeeple@gmail.com',
   packages=setuptools.find_packages(),
-  install_requires=['tensorflow', 'six', 'scipy', 'cython', 'Pillow', 'opencv-python'],
+  install_requires=['tensorflow', 'six', 'scipy', 'cython', 'Pillow', 'opencv-python', 'pandas', 'tqdm'],
   setup_requires=['tensorflow>=2.0.0', 'cython>=0.28', 'numpy>=1.14.0'],
   entry_points={
     'console_scripts': [

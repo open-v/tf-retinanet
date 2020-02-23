@@ -38,15 +38,15 @@ def main(args=None):
 
   # training
   if args.train:
+    if not args.num_classes:
+      args.num_classes = int(input('Input num classes: '))
     model = tf_retinanet.build(args.backbone, num_classes=args.num_classes)
     if not args.dataset:
       args.dataset = input('Input path to dataset: ')
     if not args.checkpoints:
       args.checkpoints = input('Input path to store checkpoints: ')
-    if not args.num_classes:
-      args.num_classes = int(input('Input num classes: '))
     dataset = tf_retinanet.data.read(args.dataset)
-    tf_retinanet.train(model, dataset, num_classes=args.num_classes, epochs=args.epochs,
+    tf_retinanet.train(model, dataset, epochs=args.epochs,
         lr=args.lr, checkpoints=args.checkpoints)
 
 if __name__ == '__main__':
