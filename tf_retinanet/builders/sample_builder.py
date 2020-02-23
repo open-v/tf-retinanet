@@ -19,7 +19,7 @@ def build(image, bbox, label, num_classes):
   images = tf.io.serialize_tensor(np.float32(images))
   bboxes = tf.io.serialize_tensor(np.float32(bboxes))
   labels = tf.io.serialize_tensor(np.float32(classes))
-  
+
   feature = {
     'images': feature_build(images),
     'bboxes': feature_build(bboxes),

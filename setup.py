@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
   name='tf-retinanet',
-  version='0.2.0',
+  version='0.2.1',
   description='TensorFlow implementation of RetinaNet object detection',
   url='https://github.com/open-v/tf-retinanet',
   download_url='https://github.com/open-v/tf-retinanet/tags',

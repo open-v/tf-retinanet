@@ -11,4 +11,4 @@ def to_classes(labels):
       data[name] = index
       index += 1
     classes[i] = data[name]
-  return classes, i
+  return classes, index
