@@ -11,7 +11,6 @@ from tqdm import tqdm
 from .builders.model_builder import build
 from . import anchors
 
-@tf.function
 def train(model, dataset, epochs=5, lr=1e-5, checkpoints=None):
   optimizer = tf.keras.optimizers.Adam(lr=lr)
   for i in range(epochs):
