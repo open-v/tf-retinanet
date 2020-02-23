@@ -24,6 +24,8 @@ def train(model, dataset, num_classes, epochs=5, lr=1e-5, checkpoints=None):
         focal  = losses.focal(labels, classification)
       gradients = tape.gradient([smooth, focal], model.trainable_variables)
       optimizer.apply_gradients(zip(gradients, model.trainable_variables))
+    if checkpoints:
+      model.save_weights(checkpoints)
 
 @tf.function
 def detection(model, images, **kwargs):
