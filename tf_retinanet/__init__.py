@@ -22,7 +22,8 @@ def train(model, dataset, epochs=5, lr=1e-5, checkpoints=None):
         localization, classification = model(images, training=True)
         smooth = losses.smooth_l1(boxes, localization)
         focal  = losses.focal(labels, classification)
-      gradients = tape.gradient([smooth, focal], model.trainable_variables)
+        loss = smooth * 0.6 + focal * 0.4
+      gradients = tape.gradient(loss, model.trainable_variables)
       optimizer.apply_gradients(zip(gradients, model.trainable_variables))
     if checkpoints:
       model.save_weights(checkpoints)
